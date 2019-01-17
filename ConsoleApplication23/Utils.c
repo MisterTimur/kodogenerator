@@ -30,8 +30,8 @@ char *StrCat(char *str1, char *str2) { // Сложение строк
 
 	len1 = strlen(str1);
 	len2 = strlen(str2);
-	res = (char *)malloc(len1 + len2 + 1);
-	sprintf(res, "%s%s", str1, str2);
+	if ((res = (char *)malloc(len1 + len2 + 1)) != NULL)
+		sprintf(res, "%s%s", str1, str2);
 	return res;
 }
 
