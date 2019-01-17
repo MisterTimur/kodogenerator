@@ -3,10 +3,10 @@
 #include <stdbool.h>
 
 #define MAX_SIZE_MEM 1024*1440
-extern uint G_ADR; // Адрес где находимся в масиве G_MEM в данный момент
-extern uchar G_MEM[MAX_SIZE_MEM]; // Готовый код программы
-extern uint G_PLA;
-extern uint L_ADR;
+extern uint PC; // Адрес где находимся в масиве G_MEM в данный момент
+extern uchar Program[MAX_SIZE_MEM]; // Готовый код программы
+extern uint Platform;
+extern uint BaseAddres;
 
 bool Init();
 
@@ -18,7 +18,7 @@ void FUN_(const char *iStr);
 
 bool LAB_INIT();
 
-void PLA_(int iPla);
+void SetPlatform(int iPla);
 
 void ORG_(uint iAdr);
 

@@ -2,14 +2,14 @@
 #include "Intel.h"
 #include "generator.h"
 
-void VAR_WORD_(const char *iNam, ushort iNom) {
-  LAB_(iNam);
-  DB_(((uchar *)&iNom)[0]);
-  DB_(((uchar *)&iNom)[1]);
+void VAR_WORD_(const char *name, ushort number) {
+  LAB_(name);
+  DB_(((uchar *)&number)[0]);
+  DB_(((uchar *)&number)[1]);
 }
-void VAR_BYTE_(const char *iNam, uchar iNom) {
-  LAB_(iNam);
-  DB_(iNom);
+void VAR_BYTE_(const char *name, uchar number) {
+  LAB_(name);
+  DB_(number);
 }
 
 void Tr_Stop() {
@@ -17,20 +17,20 @@ void Tr_Stop() {
   NOP_();
   jmp_byte("ZZZ");
 }
-void Tr_Print(const char *iTex) {
+void MyPrint(const char *text) {
 
-  FUN_("Tr_Print");
+  FUN_("MyPrint");
   NOP_();
   mov_DI_(ADR_("lText"));
   call_("PRINT16");
   jmp_byte("NEX");
   LAB_("lText");
-  STR_(iTex);
+  STR_(text);
   LAB_("NEX");
   NOP_();
-  FUN_("Tr_Print");
+  FUN_("MyPrint");
 }
-void Include_Tr_Print() {
+void IncludeMyPrint() {
 
   // =============================================
   // подпрограмам вывода строки в консоль в 16 битном режиме
@@ -74,7 +74,7 @@ void Include_Tr_Print() {
 }
 void Loader() {
 
-  PLA_(PL_I16); // Выбираем платформу
+  SetPlatform(PL_I16); // Выбираем платформу
   ORG_(0x7C00); // Устанавливаем адрес работы программы
   FUN_("");     // Устанавливаем глобальную область видимости для меток
   // Устанавливаем сегментные регистры ===========
@@ -88,8 +88,7 @@ void Loader() {
   // =============================================
   // Выбираем видео режим
   mov_AH_(0); // ПОдпрограмма установики  видео режима
-  mov_AL_(
-      3); // текст    80x25    16/8           CGA,EGA  b800  Comp,RGB,Enhanced
+  mov_AL_(3); // текст    80x25    16/8           CGA,EGA  b800  Comp,RGB,Enhanced
   int_(0x10); // Прерывание 10h
 
   // Выбираем страницу
@@ -97,7 +96,7 @@ void Loader() {
   mov_AL_(0); // Видео страница 0
   int_(0x10); // Прерывание 10h
 
-  Tr_Print("Start Ok");
+  MyPrint("Start Ok");
 
   // Прячем курсор
   mov_AH_(2);  // ПОдпрограмма установки курсора
@@ -107,7 +106,7 @@ void Loader() {
   int_(0x10);  // Прерывание 10h
 
   // =============================================
-  Tr_Print("Start load 18 sectors");
+  MyPrint("Start load 18 sectors");
 
   // Загрузка оставшейся части программы с диска
   /* Источник http://www.codenet.ru/progr/dos/int_0012.php
@@ -138,11 +137,11 @@ void Loader() {
   mov_AH_(2);  // Номер подпрограммы прерывания 13h
   int_(0x13);  // Прерывание работа с диском
 
-  Tr_Print("End load 18 sectors");
+  MyPrint("End load 18 sectors");
 
   Tr_Stop();
 
-  Include_Tr_Print();
+  IncludeMyPrint();
 
   // ====================================
   // Всякие данные для программы
@@ -153,6 +152,6 @@ void Loader() {
   // STL_("End load 18 sectors")      ;
 
   // ====================================
-  G_MEM[510] = 0x55;
-  G_MEM[511] = 0xaa;
+  Program[510] = 0x55;
+  Program[511] = 0xaa;
 }

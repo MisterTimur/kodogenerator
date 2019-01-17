@@ -1,16 +1,16 @@
 #include "File_IMA.h"
 #include <stdio.h>
 
-void Create_IMA(uchar *G_MEM, int iSize, const char *iNam) {
+void Create_IMA(uchar *memory, int size, const char *name) {
 
   // Записываем на диск
   // Записываем создайм файл образ диска
-  FILE *Tr_File = fopen(iNam, "wb");
-  int kol = 0;
-  fseek(Tr_File, 0, SEEK_SET); // Перемещаемся в начало файла
+  FILE *fout = fopen(name, "wb");
+  int cnt = 0;
+  fseek(fout, 0, SEEK_SET); // Перемещаемся в начало файла
   do {
-    fwrite(&G_MEM[kol], 128, 1, Tr_File); // Загружаем файл
-    kol = kol + 128;
-  } while (kol < iSize);
-  fclose(Tr_File);
+    fwrite(&memory[cnt], 128, 1, fout); // Загружаем файл
+    cnt = cnt + 128;
+  } while (cnt < size);
+  fclose(fout);
 }

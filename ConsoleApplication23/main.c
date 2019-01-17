@@ -5,14 +5,14 @@
 #include "Loader.h"
 #include "generator.h"
 
-int main() {
+int main(int argc, char *argv[]) {
   Init();
   // Гененрируем код
-  G_ADR = 0;
+  PC = 0;
   Loader(); // Первый проход
   printf("=====\r\n");
-  G_ADR = 0;
+  PC = 0;
   Loader(); // Второй проход
-  printf("Compile Ok Size of %d!\n", G_ADR);
-  Create_IMA(G_MEM, MAX_SIZE_MEM, "TimOs.ima");
+  printf("Compile Ok Size of %d!\n", PC);
+  Create_IMA(Program, MAX_SIZE_MEM, "TimOs.ima");
 }

@@ -1,5 +1,5 @@
 #pragma once
 
-void Include_Tr_Print();
+void IncludeMyPrint();
 
 void Loader();
