@@ -2,6 +2,20 @@
 #include "generator.h"
 // Команеды специфичные только для INTEL ===============
 
+
+
+void NOP_(){ 
+     if (G_PLA==PL_I16) {// Платформа 16 бит 8086
+     G_MEM[G_ADR]=0x90;G_ADR=G_ADR+1;
+     } 
+	else if (G_PLA==PL_I32) {// Платформа 32бит 80386
+     G_MEM[G_ADR]=0x90;G_ADR=G_ADR+1;
+     }
+	else if (G_PLA==PL_I64) {// Платформа 64 бит 
+     G_MEM[G_ADR]=0x90;G_ADR=G_ADR+1;
+     }
+	else ERR(" ERR NOP_ ");
+}
 void cli(){ 
      if (G_PLA==PL_I16) {// Платформа 16 бит 8086
      G_MEM[G_ADR]=0xFA;G_ADR=G_ADR+1;

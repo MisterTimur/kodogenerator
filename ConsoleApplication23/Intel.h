@@ -4,6 +4,8 @@
 #define PL_I32 32 // 32 битный режим интел 
 #define PL_I64 64 // 64 битный режим интел 
 
+void NOP_();
+
 void cli();
 
 void xor_EAX_EAX();
