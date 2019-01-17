@@ -124,7 +124,7 @@ void Loader() {
 
     Tr_Print("End load 18 sectors");       
 
-    Tr_Stop(); 
+    Tr_Stop();             
                     
     Include_Tr_Print();                   
        
