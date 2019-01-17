@@ -96,8 +96,7 @@ void Loader() {
   mov_AL_(0); // Видео страница 0
   int_(0x10); // Прерывание 10h
 
-  char *build_time = __DATE__" "__TIME__;
-  MyPrint(build_time);
+  MyPrint(__DATE__" "__TIME__);
   MyPrint("Start Ok");
 
   // Прячем курсор
