@@ -21,7 +21,7 @@ void MyPrint(const char *text) {
 
   FUN_("MyPrint");
   NOP_();
-  mov_DI_(ADR_("lText"));
+  movw("DI", ADR_("lText"));
   call_("PRINT16");
   jmp_byte("NEX");
   LAB_("lText");
@@ -37,7 +37,7 @@ void IncludeMyPrint() {
   // В DS:DI должен быть адрес строки
 
   FUN_("PRINT16"); // Обьявляем новую область
-  mov_AX_(0xB800); // mov ax,B800  Видеопамять
+  movw("AX", 0xB800); // mov ax,B800  Видеопамять
   mov_ES_AX();     // mov es,ax    в ES
 
   mov_AX_A_(ADR_("CURR_Y"));
@@ -65,7 +65,7 @@ void IncludeMyPrint() {
   mov_DX_A_(ADR_("CURR_Y")); // Переход на след строку
   inc_DX_();
   mov_A_DX_(ADR_("CURR_Y"));
-  mov_DX_(0);
+  movw("DX", 0);
   mov_A_DX_(ADR_("CURR_X"));
 
   ret_();
@@ -82,7 +82,7 @@ void Loader() {
   mov_SS_AX(); // Устанавлиавем Сегмент стека 0
   mov_DS_AX(); // Устанавлиавем Сегмент данных 0
   mov_ES_AX(); // Устанавлиавем Сегмент Доп сег фиг зн зачем он нужен  0
-  mov_SP_(0xFFFF);
+  movw("SP", 0xFFFF);
   // =============================================
 
   // =============================================
@@ -126,9 +126,9 @@ void Loader() {
 
   */
 
-  mov_AX_(0);      // Не можем писать в ES напряимую тока через Рег
+  movw("AX", 0);      // Не можем писать в ES напряимую тока через Рег
   mov_ES_AX();       // Адрес сегмента куда загружаем код
-  mov_BX_(0x7E00); // Адрес внутри сегмента
+  movw("BX", 0x7E00); // Адрес внутри сегмента
 
   movb("DL", 0);  // Читаем с диска А
   movb("DH", 0);  // номер головки чтения/записи

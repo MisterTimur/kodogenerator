@@ -5,7 +5,9 @@
 #define PL_I32 32 // 32 битный режим интел
 #define PL_I64 64 // 64 битный режим интел
 
-void movb(const char * reg, ushort value);
+void movb(const char * reg, uchar value);
+
+void movw(const char * reg, ushort value);
 
 void NOP_();
 
@@ -33,23 +35,9 @@ void mov_ES_AX();
 
 void int_(uchar value);
 
-void mov_SP_(ushort value);
-
 void mov_ESP_(uint value);
 
-void mov_SI_(ushort value);
-
-void mov_DI_(ushort value);
-
 void mov_EDI_(uint value);
-
-void mov_BP_(ushort value);
-
-void mov_AX_(ushort value);
-
-void mov_BX_(ushort value);
-
-void mov_CX_(ushort value);
 
 void mul_DL_();
 
@@ -63,29 +51,11 @@ void shl_DL_1_();
 
 void mov_A_DX_(ushort value);
 
-void mov_DX_(ushort value);
-
 void mov_DX_A_(ushort value);
 
 void mov_AX_A_(ushort value);
 
 void mov_SI_A_(ushort value);
-
-void mov_AL_(uchar value);
-
-void mov_AH_(uchar value);
-
-void mov_BL_(uchar value);
-
-void mov_BH_(uchar value);
-
-void mov_DH_(uchar value);
-
-void mov_DL_(uchar value);
-
-void mov_CL_(uchar value);
-
-void mov_CH_(uchar value);
 
 void mov_A_DI_AL();
 
