@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "generator.h"
+#include "Loader.h"
 
 int main()
 {   

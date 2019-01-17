@@ -1,5 +1,6 @@
 #include "Loader.h"
 #include "Intel.h"
+#include "generator.h"
 
 void Loader() {
                                     

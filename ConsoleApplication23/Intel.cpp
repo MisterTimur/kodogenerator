@@ -1,4 +1,5 @@
-#include "Intel.h"
+#include "intel.h"
+#include "generator.h"
 // Команеды специфичные только для INTEL ===============
 
 void cli(){ 

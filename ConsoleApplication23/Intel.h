@@ -13,3 +13,73 @@ void inc_DI_();
 void inc_SI_();
 
 void test_AL_AL_();
+
+void test_AX_AX_();
+
+void xor_AX_AX();
+
+void mov_CS_AX();
+
+void mov_DS_AX();
+
+void mov_SS_AX();
+
+void mov_ES_AX();
+
+void int_(unsigned char iNom);
+
+void mov_SP_(unsigned short iNom);
+
+void mov_ESP_(unsigned int iNom);
+
+void mov_SI_(unsigned short iNom);
+
+void mov_DI_(unsigned short iNom);
+
+void mov_EDI_(unsigned int iNom);
+
+void mov_BP_(unsigned short iNom);
+
+void mov_AX_(unsigned short iNom);
+
+void mov_BX_(unsigned short iNom);
+
+void mov_CX_(unsigned short iNom);
+
+void mov_AL_(unsigned char iNom);
+
+void mov_AH_(unsigned char iNom);
+
+void mov_BL_(unsigned char iNom);
+
+void mov_BH_(unsigned char iNom);
+
+void mov_DH_(unsigned char iNom);
+
+void mov_DL_(unsigned char iNom);
+
+void mov_CL_(unsigned char iNom);
+
+void mov_CH_(unsigned char iNom);
+
+void mov_A_DI_AL();
+
+void mov_A_SI_AL();
+
+void mov_AL_A_DI();
+
+void mov_AL_A_SI();
+
+void mov_A_DI_AX();
+
+void mov_A_ES_DI_AL();
+
+void mov_A_ES_SI_AL();
+
+void jmp_byte(const char * iStr);
+
+void jz_byte(const char * iStr);
+
+void call_(const char * iStr);
+
+void ret_();
