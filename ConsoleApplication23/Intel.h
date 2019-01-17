@@ -48,6 +48,27 @@ void mov_BX_(unsigned short iNom);
 
 void mov_CX_(unsigned short iNom);
 
+void mul_DL_();
+
+void inc_DX_();
+
+void mov_SI_AX_();
+
+void add_AX_DX_();
+
+void shl_DL_1_();
+
+void mov_A_DX_(unsigned short iNom);
+
+void mov_DX_(unsigned short iNom);
+                 
+
+void mov_DX_A_(unsigned short iNom);
+
+void mov_AX_A_(unsigned short iNom);
+
+void mov_SI_A_(unsigned short iNom);
+
 void mov_AL_(unsigned char iNom);
 
 void mov_AH_(unsigned char iNom);

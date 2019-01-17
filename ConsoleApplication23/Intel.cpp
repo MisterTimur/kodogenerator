@@ -309,6 +309,86 @@ else ERR("mov_CX_");
 
 
 }
+
+void mul_DL_(){
+     if (G_PLA==PL_I16) { // Платформа 16 бит 8086
+     G_MEM[G_ADR]=0xF6;G_ADR=G_ADR+1;  
+     G_MEM[G_ADR]=0xE2;G_ADR=G_ADR+1;                        
+     }
+else ERR("mul_AL_");  
+}
+void inc_DX_(){
+     if (G_PLA==PL_I16) { // Платформа 16 бит 8086
+     G_MEM[G_ADR]=0x42;G_ADR=G_ADR+1;                         
+     }
+else ERR("inc_DX_");  
+}
+void mov_SI_AX_(){
+     if (G_PLA==PL_I16) { // Платформа 16 бит 8086
+     G_MEM[G_ADR]=0x8B;G_ADR=G_ADR+1;  
+     G_MEM[G_ADR]=0xF0;G_ADR=G_ADR+1;                        
+     }
+else ERR("mov_SI_AX_");  
+}
+void add_AX_DX_(){
+     if (G_PLA==PL_I16) { // Платформа 16 бит 8086
+     G_MEM[G_ADR]=0x03;G_ADR=G_ADR+1;  
+     G_MEM[G_ADR]=0xC2;G_ADR=G_ADR+1;                        
+     }
+else ERR("add_AX_DX_");  
+}
+void shl_DL_1_(){
+     if (G_PLA==PL_I16) { // Платформа 16 бит 8086
+     G_MEM[G_ADR]=0xD0;G_ADR=G_ADR+1;  
+     G_MEM[G_ADR]=0xE2;G_ADR=G_ADR+1;                        
+     }
+else ERR("shl_DL_1_");  
+}
+void mov_A_DX_(unsigned short iNom){
+     if (G_PLA==PL_I16) { // Платформа 16 бит 8086
+     G_MEM[G_ADR]=0x89;G_ADR=G_ADR+1;  
+     G_MEM[G_ADR]=0x16;G_ADR=G_ADR+1;  
+     G_MEM[G_ADR]=((unsigned char*)&iNom)[0];G_ADR=G_ADR+1;
+     G_MEM[G_ADR]=((unsigned char*)&iNom)[1];G_ADR=G_ADR+1;
+     }
+else ERR("mov_A_DX_");  
+}
+void mov_DX_(unsigned short iNom){
+     if (G_PLA==PL_I16) { // Платформа 16 бит 8086
+     G_MEM[G_ADR]=0xBA;G_ADR=G_ADR+1;  
+     G_MEM[G_ADR]=((unsigned char*)&iNom)[0];G_ADR=G_ADR+1;
+     G_MEM[G_ADR]=((unsigned char*)&iNom)[1];G_ADR=G_ADR+1;
+     }
+else ERR("mov_DX_");  
+}
+void mov_DX_A_(unsigned short iNom){
+     if (G_PLA==PL_I16) { // Платформа 16 бит 8086
+     G_MEM[G_ADR]=0x8B;G_ADR=G_ADR+1;  
+     G_MEM[G_ADR]=0x16;G_ADR=G_ADR+1;  
+     G_MEM[G_ADR]=((unsigned char*)&iNom)[0];G_ADR=G_ADR+1;
+     G_MEM[G_ADR]=((unsigned char*)&iNom)[1];G_ADR=G_ADR+1;
+     }
+else ERR("mov_DX_A_");  
+}
+void mov_AX_A_(unsigned short iNom){
+     if (G_PLA==PL_I16) { // Платформа 16 бит 8086
+     G_MEM[G_ADR]=0xA1;G_ADR=G_ADR+1;  
+     G_MEM[G_ADR]=((unsigned char*)&iNom)[0];G_ADR=G_ADR+1;
+     G_MEM[G_ADR]=((unsigned char*)&iNom)[1];G_ADR=G_ADR+1;
+     }
+else ERR("mov_AX_A_");  
+}
+void mov_SI_A_(unsigned short iNom){
+     if (G_PLA==PL_I16) {// Платформа 16 бит 8086
+     G_MEM[G_ADR]=0x8B;G_ADR=G_ADR+1;
+     G_MEM[G_ADR]=0x36;G_ADR=G_ADR+1;
+     G_MEM[G_ADR]=((unsigned char*)&iNom)[0];G_ADR=G_ADR+1;
+     G_MEM[G_ADR]=((unsigned char*)&iNom)[1];G_ADR=G_ADR+1;
+     }
+else ERR("mov_SI_A");  
+}
+
+
       
 void mov_AL_(unsigned char iNom){
      if (G_PLA==PL_I16) {// Платформа 16 бит 8086

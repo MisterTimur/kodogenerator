@@ -2,12 +2,15 @@
 #include "Intel.h"
 #include "generator.h"
 
-
-//void VAR_WORD_(char* iNam,unsigned short iNom) {
-//   LAB_(iNam);   
-//   DB_(((unsigned char*)&iNom)[0]);
-//   DB_(((unsigned char*)&iNom)[1]);
-//}
+void VAR_WORD_(const char* iNam,unsigned short iNom) {
+   LAB_(iNam);   
+   DB_(((unsigned char*)&iNom)[0]);
+   DB_(((unsigned char*)&iNom)[1]);
+}
+void VAR_BYTE_(const char* iNam,unsigned char iNom) {
+   LAB_(iNam);   
+   DB_(iNom);  
+}
 
 
 void Tr_Stop(){
@@ -15,8 +18,8 @@ LAB_("ZZZ");
 NOP_();
 jmp_byte("ZZZ");   
 }
-
 void Tr_Print(const char* iTex){
+
     FUN_("Tr_Print");  
     NOP_();
     mov_DI_(ADR_("lText"));
@@ -26,11 +29,9 @@ void Tr_Print(const char* iTex){
     STR_(iTex);
     LAB_("NEX");   
     NOP_();
-    FUN_("Tr_Print");  
+    FUN_("Tr_Print"); 
+    
 }
-
-
-
 void Include_Tr_Print(){    
 
     // =============================================
@@ -40,8 +41,16 @@ void Include_Tr_Print(){
     FUN_("PRINT16")       ;// Обьявляем новую область   
     mov_AX_(0xB800)       ;// mov ax,B800  Видеопамять 
     mov_ES_AX()           ;// mov es,ax    в ES   
-                          
-    mov_SI_(0)            ;
+    
+    
+    mov_AX_A_(ADR_("CURR_Y"));
+    mov_DL_(160)             ;
+    mul_DL_()                ;   
+    mov_DX_A_(ADR_("CURR_X"));
+    shl_DL_1_()              ;
+    add_AX_DX_()             ;
+    mov_SI_AX_()             ;  
+ 
     LAB_("Cikl")          ;
     mov_AL_A_DI()         ;// mov al,[di]           
     test_AL_AL_()         ;// test al,al
@@ -55,9 +64,18 @@ void Include_Tr_Print(){
     jmp_byte("Cikl")      ;// jmp cikl
 
     LAB_("EX")            ;
-    ret_()                ;   
-}
+    
+    mov_DX_A_(ADR_("CURR_Y"));   // Переход на след строку 
+    inc_DX_()                ;
+    mov_A_DX_(ADR_("CURR_Y"));
+    mov_DX_(0)               ;
+    mov_A_DX_(ADR_("CURR_X"));
+    
+    ret_()                ;  
+    VAR_WORD_("CURR_X",0) ;
+    VAR_WORD_("CURR_Y",0) ;
 
+}
 void Loader() {
                                     
     PLA_(PL_I16); // Выбираем платформу 
