@@ -21,22 +21,22 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="main.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="generator.cpp">
+    <ClCompile Include="Utils.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Loader.cpp">
+    <ClCompile Include="Loader.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Intel.cpp">
+    <ClCompile Include="generator.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Intel.c">
       <Filter>platforms</Filter>
     </ClCompile>
-    <ClCompile Include="Utils.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="File_IMA.cpp">
+    <ClCompile Include="File_IMA.c">
       <Filter>images</Filter>
     </ClCompile>
   </ItemGroup>
@@ -54,6 +54,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="File_IMA.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="common.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

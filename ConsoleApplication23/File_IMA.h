@@ -1,4 +1,4 @@
 #pragma once
+#include "common.h"
 
- 
-void Create_IMA(unsigned char * G_MEM, int iSize, const char * iNam);
+void Create_IMA(uchar *G_MEM, int iSize, const char *iNam);

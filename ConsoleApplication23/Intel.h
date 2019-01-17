@@ -1,8 +1,9 @@
 #pragma once
+#include "common.h"
 
-#define PL_I16 16 // 16 битный режим интел      
-#define PL_I32 32 // 32 битный режим интел 
-#define PL_I64 64 // 64 битный режим интел 
+#define PL_I16 16 // 16 битный режим интел
+#define PL_I32 32 // 32 битный режим интел
+#define PL_I64 64 // 64 битный режим интел
 
 void NOP_();
 
@@ -28,25 +29,25 @@ void mov_SS_AX();
 
 void mov_ES_AX();
 
-void int_(unsigned char iNom);
+void int_(uchar iNom);
 
-void mov_SP_(unsigned short iNom);
+void mov_SP_(ushort iNom);
 
-void mov_ESP_(unsigned int iNom);
+void mov_ESP_(uint iNom);
 
-void mov_SI_(unsigned short iNom);
+void mov_SI_(ushort iNom);
 
-void mov_DI_(unsigned short iNom);
+void mov_DI_(ushort iNom);
 
-void mov_EDI_(unsigned int iNom);
+void mov_EDI_(uint iNom);
 
-void mov_BP_(unsigned short iNom);
+void mov_BP_(ushort iNom);
 
-void mov_AX_(unsigned short iNom);
+void mov_AX_(ushort iNom);
 
-void mov_BX_(unsigned short iNom);
+void mov_BX_(ushort iNom);
 
-void mov_CX_(unsigned short iNom);
+void mov_CX_(ushort iNom);
 
 void mul_DL_();
 
@@ -58,32 +59,31 @@ void add_AX_DX_();
 
 void shl_DL_1_();
 
-void mov_A_DX_(unsigned short iNom);
+void mov_A_DX_(ushort iNom);
 
-void mov_DX_(unsigned short iNom);
-                 
+void mov_DX_(ushort iNom);
 
-void mov_DX_A_(unsigned short iNom);
+void mov_DX_A_(ushort iNom);
 
-void mov_AX_A_(unsigned short iNom);
+void mov_AX_A_(ushort iNom);
 
-void mov_SI_A_(unsigned short iNom);
+void mov_SI_A_(ushort iNom);
 
-void mov_AL_(unsigned char iNom);
+void mov_AL_(uchar iNom);
 
-void mov_AH_(unsigned char iNom);
+void mov_AH_(uchar iNom);
 
-void mov_BL_(unsigned char iNom);
+void mov_BL_(uchar iNom);
 
-void mov_BH_(unsigned char iNom);
+void mov_BH_(uchar iNom);
 
-void mov_DH_(unsigned char iNom);
+void mov_DH_(uchar iNom);
 
-void mov_DL_(unsigned char iNom);
+void mov_DL_(uchar iNom);
 
-void mov_CL_(unsigned char iNom);
+void mov_CL_(uchar iNom);
 
-void mov_CH_(unsigned char iNom);
+void mov_CH_(uchar iNom);
 
 void mov_A_DI_AL();
 
@@ -99,10 +99,10 @@ void mov_A_ES_DI_AL();
 
 void mov_A_ES_SI_AL();
 
-void jmp_byte(const char * iStr);
+void jmp_byte(const char *iStr);
 
-void jz_byte(const char * iStr);
+void jz_byte(const char *iStr);
 
-void call_(const char * iStr);
+void call_(const char *iStr);
 
 void ret_();
