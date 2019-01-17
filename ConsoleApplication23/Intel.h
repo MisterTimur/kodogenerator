@@ -29,25 +29,25 @@ void mov_SS_AX();
 
 void mov_ES_AX();
 
-void int_(uchar iNom);
+void int_(uchar value);
 
-void mov_SP_(ushort iNom);
+void mov_SP_(ushort value);
 
-void mov_ESP_(uint iNom);
+void mov_ESP_(uint value);
 
-void mov_SI_(ushort iNom);
+void mov_SI_(ushort value);
 
-void mov_DI_(ushort iNom);
+void mov_DI_(ushort value);
 
-void mov_EDI_(uint iNom);
+void mov_EDI_(uint value);
 
-void mov_BP_(ushort iNom);
+void mov_BP_(ushort value);
 
-void mov_AX_(ushort iNom);
+void mov_AX_(ushort value);
 
-void mov_BX_(ushort iNom);
+void mov_BX_(ushort value);
 
-void mov_CX_(ushort iNom);
+void mov_CX_(ushort value);
 
 void mul_DL_();
 
@@ -59,31 +59,31 @@ void add_AX_DX_();
 
 void shl_DL_1_();
 
-void mov_A_DX_(ushort iNom);
+void mov_A_DX_(ushort value);
 
-void mov_DX_(ushort iNom);
+void mov_DX_(ushort value);
 
-void mov_DX_A_(ushort iNom);
+void mov_DX_A_(ushort value);
 
-void mov_AX_A_(ushort iNom);
+void mov_AX_A_(ushort value);
 
-void mov_SI_A_(ushort iNom);
+void mov_SI_A_(ushort value);
 
-void mov_AL_(uchar iNom);
+void mov_AL_(uchar value);
 
-void mov_AH_(uchar iNom);
+void mov_AH_(uchar value);
 
-void mov_BL_(uchar iNom);
+void mov_BL_(uchar value);
 
-void mov_BH_(uchar iNom);
+void mov_BH_(uchar value);
 
-void mov_DH_(uchar iNom);
+void mov_DH_(uchar value);
 
-void mov_DL_(uchar iNom);
+void mov_DL_(uchar value);
 
-void mov_CL_(uchar iNom);
+void mov_CL_(uchar value);
 
-void mov_CH_(uchar iNom);
+void mov_CH_(uchar value);
 
 void mov_A_DI_AL();
 
@@ -99,10 +99,10 @@ void mov_A_ES_DI_AL();
 
 void mov_A_ES_SI_AL();
 
-void jmp_byte(const char *iStr);
+void jmp_byte(const char *str);
 
-void jz_byte(const char *iStr);
+void jz_byte(const char *str);
 
-void call_(const char *iStr);
+void call_(const char *str);
 
 void ret_();

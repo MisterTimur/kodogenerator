@@ -1,4 +1,5 @@
 #pragma once
+
 #include "common.h"
 #include <stdbool.h>
 
@@ -10,22 +11,22 @@ extern uint BaseAddres;
 
 bool Init();
 
-uint ADR_(const char *iNam);
+uint ADR_(const char *name);
 
-void LAB_(const char *iStr);
+void LAB_(const char *str);
 
-void FUN_(const char *iStr);
+void FUN_(const char *str);
 
 bool LAB_INIT();
 
-void SetPlatform(int iPla);
+void SetPlatform(int platform);
 
-void ORG_(uint iAdr);
+void ORG_(uint addr);
 
-void ERR(const char *iStr);
+void ERR(const char *str);
 
-void STR_(const char *iStr);
+void STR_(const char *str);
 
-void STL_(const char *iStr);
+void STL_(const char *str);
 
-void DB_(uchar iNom);
+void DB_(uchar value);
