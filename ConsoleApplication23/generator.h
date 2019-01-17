@@ -5,7 +5,7 @@ extern unsigned char G_MEM[Max_Siz_Mem];// Готовый код программы
 extern unsigned int  G_PLA;
 extern unsigned int  L_ADR;
 
-void Create_IMA(const char * iNam);
+ 
 bool Init();
 
 unsigned int ADR_(const char * iNam);

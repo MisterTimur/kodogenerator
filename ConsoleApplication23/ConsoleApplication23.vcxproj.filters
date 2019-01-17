@@ -16,6 +16,9 @@
     <Filter Include="platforms">
       <UniqueIdentifier>{120c367d-9923-4879-9496-010cb5a865e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="images">
+      <UniqueIdentifier>{0e48ff07-8c6e-4446-bfed-ff3a961eeb5d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -33,6 +36,9 @@
     <ClCompile Include="Utils.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="File_IMA.cpp">
+      <Filter>images</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="generator.h">
@@ -45,6 +51,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="Utils.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="File_IMA.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

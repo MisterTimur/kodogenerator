@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="File_IMA.cpp" />
     <ClCompile Include="generator.cpp" />
     <ClCompile Include="Intel.cpp" />
     <ClCompile Include="Loader.cpp" />
@@ -159,6 +160,7 @@
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="File_IMA.h" />
     <ClInclude Include="generator.h" />
     <ClInclude Include="Intel.h" />
     <ClInclude Include="Loader.h" />
