@@ -5,6 +5,8 @@
 #define PL_I32 32 // 32 битный режим интел
 #define PL_I64 64 // 64 битный режим интел
 
+void movb(const char * reg, ushort value);
+
 void NOP_();
 
 void cli();

@@ -1,5 +1,43 @@
 #include "intel.h"
 #include "generator.h"
+
+const char *regname[3][9] = {
+  { "AL", "CL", "DL", "BL", "AH", "CH", "DH", "BH" },
+  { "AX", "CX", "DX", "BX", "SP", "BP", "SI", "DI" },
+  { "EAX","ECX","EDX","EBX","ESP","EBP","ESI","EDI" } 
+};
+/*
+	Возвращает индекс регистра или -1 в случае ошибки
+*/
+static int getRegIndex(const char *reg, int offset) {
+	for (int i = 0; i < 8; i++)
+	{
+		if (!strcmp(reg, regname[offset][i]))
+			return i;
+	}
+	return -1;
+}
+
+void movb(const char *reg, ushort value) {
+ 
+	int i = getRegIndex(reg, 0);
+	if (i == -1) 
+		ERR("Bad register name");
+
+	switch (Platform) {
+	case PL_I16:
+	case PL_I32:
+	{
+		int i = getRegIndex(reg, 0);
+		Program[PC++] = 0xB0 + i;
+		Program[PC++] = value;
+	}
+	break;
+	default:
+		ERR("mov_AL_");
+	}
+}
+
 // Команды специфичные только для INTEL ===============
 
 void NOP_() {
@@ -69,6 +107,7 @@ void xor_AX_AX() {
   } else
     ERR("xor_AX_AX");
 }
+
 void mov_CS_AX() {
   if (Platform == PL_I16) { // Платформа 16 бит 8086
     ERR("mov_CS_AX");
@@ -120,20 +159,6 @@ void mov_ES_AX() {
   } else
     ERR("Ошибка такой команды в выбраной платформе не сущестукет ");
 }
-
-void int_(uchar value) {
-  if (Platform == PL_I16) { // Платформа 16 бит 8086
-    Program[PC++] = 0xCD;
-    Program[PC++] = value;
-  } else if (Platform == PL_I32) { // Платформа 32бит 80386
-    Program[PC++] = 0xCD;
-    Program[PC++] = value;
-  } else if (Platform == PL_I64) { // Платформа 64 бит
-    Program[PC++] = 0xCD;
-    Program[PC++] = value;
-  } else
-    ERR("Ошибка такой команды в выбраной платформе не сущестукет ");
-}
 void mov_SP_(ushort value) {
   if (Platform == PL_I16) { // Платформа 16 бит 8086
     Program[PC++] = 0xBC;
@@ -158,7 +183,6 @@ void mov_ESP_(uint value) {
   } else
     ERR("mov_ESP_");
 }
-
 void mov_SI_(ushort value) {
   if (Platform == PL_I16) { // Платформа 16 бит 8086
     Program[PC++] = 0xBE;
@@ -209,7 +233,6 @@ void mov_BP_(ushort value) {
   } else
     ERR("mov_BP_");
 }
-
 void mov_AX_(ushort value) {
   if (Platform == PL_I16) { // Платформа 16 бит 8086
     Program[PC++] = 0xB8;
@@ -264,6 +287,90 @@ void mov_CX_(ushort value) {
   } else
     ERR("mov_CX_");
 }
+void mov_A_DX_(ushort value) {
+	if (Platform == PL_I16) { // Платформа 16 бит 8086
+		Program[PC++] = 0x89;
+		Program[PC++] = 0x16;
+		Program[PC++] = ((uchar *)&value)[0];
+		Program[PC++] = ((uchar *)&value)[1];
+	}
+	else
+		ERR("mov_A_DX_");
+}
+void mov_DX_(ushort value) {
+	if (Platform == PL_I16) { // Платформа 16 бит 8086
+		Program[PC++] = 0xBA;
+		Program[PC++] = ((uchar *)&value)[0];
+		Program[PC++] = ((uchar *)&value)[1];
+	}
+	else
+		ERR("mov_DX_");
+}
+void mov_DX_A_(ushort value) {
+	if (Platform == PL_I16) { // Платформа 16 бит 8086
+		Program[PC++] = 0x8B;
+		Program[PC++] = 0x16;
+		Program[PC++] = ((uchar *)&value)[0];
+		Program[PC++] = ((uchar *)&value)[1];
+	}
+	else
+		ERR("mov_DX_A_");
+}
+void mov_AX_A_(ushort value) {
+	if (Platform == PL_I16) { // Платформа 16 бит 8086
+		Program[PC++] = 0xA1;
+		Program[PC++] = ((uchar *)&value)[0];
+		Program[PC++] = ((uchar *)&value)[1];
+	}
+	else
+		ERR("mov_AX_A_");
+}
+void mov_SI_A_(ushort value) {
+	if (Platform == PL_I16) { // Платформа 16 бит 8086
+		Program[PC++] = 0x8B;
+		Program[PC++] = 0x36;
+		Program[PC++] = ((uchar *)&value)[0];
+		Program[PC++] = ((uchar *)&value)[1];
+	}
+	else
+		ERR("mov_SI_A");
+}
+
+void mov_AH_(uchar value) {
+	movb("AH", value);
+}
+void mov_BL_(uchar value) {
+	movb("BL", value);
+}
+void mov_BH_(uchar value) {
+	movb("BH", value);
+}
+void mov_DH_(uchar value) {
+	movb("DH", value);
+}
+void mov_DL_(uchar value) {
+	movb("DL", value);
+} void mov_CL_(uchar value) {
+	movb("CL", value);
+}
+void mov_CH_(uchar value) {
+	movb("CH", value);
+}
+
+void int_(uchar value) {
+  if (Platform == PL_I16) { // Платформа 16 бит 8086
+    Program[PC++] = 0xCD;
+    Program[PC++] = value;
+  } else if (Platform == PL_I32) { // Платформа 32бит 80386
+    Program[PC++] = 0xCD;
+    Program[PC++] = value;
+  } else if (Platform == PL_I64) { // Платформа 64 бит
+    Program[PC++] = 0xCD;
+    Program[PC++] = value;
+  } else
+    ERR("Ошибка такой команды в выбраной платформе не сущестукет ");
+}
+
 
 void mul_DL_() {
   if (Platform == PL_I16) { // Платформа 16 бит 8086
@@ -299,154 +406,7 @@ void shl_DL_1_() {
   } else
     ERR("shl_DL_1_");
 }
-void mov_A_DX_(ushort value) {
-  if (Platform == PL_I16) { // Платформа 16 бит 8086
-    Program[PC++] = 0x89;
-    Program[PC++] = 0x16;
-    Program[PC++] = ((uchar *)&value)[0];
-    Program[PC++] = ((uchar *)&value)[1];
-  } else
-    ERR("mov_A_DX_");
-}
-void mov_DX_(ushort value) {
-  if (Platform == PL_I16) { // Платформа 16 бит 8086
-    Program[PC++] = 0xBA;
-    Program[PC++] = ((uchar *)&value)[0];
-    Program[PC++] = ((uchar *)&value)[1];
-  } else
-    ERR("mov_DX_");
-}
-void mov_DX_A_(ushort value) {
-  if (Platform == PL_I16) { // Платформа 16 бит 8086
-    Program[PC++] = 0x8B;
-    Program[PC++] = 0x16;
-    Program[PC++] = ((uchar *)&value)[0];
-    Program[PC++] = ((uchar *)&value)[1];
-  } else
-    ERR("mov_DX_A_");
-}
-void mov_AX_A_(ushort value) {
-  if (Platform == PL_I16) { // Платформа 16 бит 8086
-    Program[PC++] = 0xA1;
-    Program[PC++] = ((uchar *)&value)[0];
-    Program[PC++] = ((uchar *)&value)[1];
-  } else
-    ERR("mov_AX_A_");
-}
-void mov_SI_A_(ushort value) {
-  if (Platform == PL_I16) { // Платформа 16 бит 8086
-    Program[PC++] = 0x8B;
-    Program[PC++] = 0x36;
-    Program[PC++] = ((uchar *)&value)[0];
-    Program[PC++] = ((uchar *)&value)[1];
-  } else
-    ERR("mov_SI_A");
-}
 
-void mov_AL_(uchar value) {
-  if (Platform == PL_I16) { // Платформа 16 бит 8086
-    Program[PC++] = 0xB0;
-    Program[PC++] = value;
-  } else if (Platform == PL_I32) { // Платформа 32бит 80386
-    Program[PC++] = 0xB0;
-    Program[PC++] = value;
-  } else if (Platform == PL_I64) { // Платформа 64 бит
-    Program[PC++] = 0xB0;
-    Program[PC++] = value;
-  } else
-    ERR("mov_AL_");
-}
-void mov_AH_(uchar value) {
-  if (Platform == PL_I16) { // Платформа 16 бит 8086
-    Program[PC++] = 0xB4;
-    Program[PC++] = value;
-  } else if (Platform == PL_I32) { // Платформа 32бит 80386
-    Program[PC++] = 0xB4;
-    Program[PC++] = value;
-  } else if (Platform == PL_I64) { // Платформа 64 бит
-    Program[PC++] = 0xB4;
-    Program[PC++] = value;
-  } else
-    ERR("mov_AH_");
-}
-void mov_BL_(uchar value) {
-  if (Platform == PL_I16) { // Платформа 16 бит 8086
-    Program[PC++] = 0xB3;
-    Program[PC++] = value;
-  } else if (Platform == PL_I32) { // Платформа 32бит 80386
-    Program[PC++] = 0xB3;
-    Program[PC++] = value;
-  } else if (Platform == PL_I64) { // Платформа 64 бит
-    Program[PC++] = 0xB3;
-    Program[PC++] = value;
-  } else
-    ERR("Ошибка такой команды в выбраной платформе не сущестукет ");
-}
-void mov_BH_(uchar value) {
-  if (Platform == PL_I16) { // Платформа 16 бит 8086
-    Program[PC++] = 0xB7;
-    Program[PC++] = value;
-  } else if (Platform == PL_I32) { // Платформа 32бит 80386
-    Program[PC++] = 0xB7;
-    Program[PC++] = value;
-  } else if (Platform == PL_I64) { // Платформа 64 бит
-    Program[PC++] = 0xB7;
-    Program[PC++] = value;
-  } else
-    ERR("Ошибка такой команды в выбраной платформе не сущестукет ");
-}
-void mov_DH_(uchar value) {
-  if (Platform == PL_I16) { // Платформа 16 бит 8086
-    Program[PC++] = 0xB6;
-    Program[PC++] = value;
-  } else if (Platform == PL_I32) { // Платформа 32бит 80386
-    Program[PC++] = 0xB6;
-    Program[PC++] = value;
-  } else if (Platform == PL_I64) { // Платформа 64 бит
-    Program[PC++] = 0xB6;
-    Program[PC++] = value;
-  } else
-    ERR("Ошибка такой команды в выбраной платформе не сущестукет ");
-}
-void mov_DL_(uchar value) {
-  if (Platform == PL_I16) { // Платформа 16 бит 8086
-    Program[PC++] = 0xB2;
-    Program[PC++] = value;
-  } else if (Platform == PL_I32) { // Платформа 32бит 80386
-    Program[PC++] = 0xB2;
-    Program[PC++] = value;
-  } else if (Platform == PL_I64) { // Платформа 64 бит
-    Program[PC++] = 0xB2;
-    Program[PC++] = value;
-  } else
-    ERR("Ошибка такой команды в выбраной платформе не сущестукет ");
-}
-void mov_CL_(uchar value) {
-  if (Platform == PL_I16) { // Платформа 16 бит 8086
-    Program[PC++] = 0xB1;
-    Program[PC++] = value;
-  } else if (Platform == PL_I32) { // Платформа 32бит 80386
-    Program[PC++] = 0xB1;
-    Program[PC++] = value;
-  } else if (Platform == PL_I64) { // Платформа 64 бит
-    Program[PC++] = 0xB1;
-    Program[PC++] = value;
-  } else
-    ERR("Ошибка такой команды в выбраной платформе не сущестукет ");
-}
-void mov_CH_(uchar value) {
-  if (Platform == PL_I16) { // Платформа 16 бит 8086
-    Program[PC++] = 0xB5;
-    Program[PC++] = value;
-  } else if (Platform == PL_I32) { // Платформа 32бит 80386
-    Program[PC++] = 0xB5;
-    Program[PC++] = value;
-  } else if (Platform == PL_I64) { // Платформа 64 бит
-    Program[PC++] = 0xB5;
-    Program[PC++] = value;
-  } else
-    ERR("mov_CH_");
-}
 
 void mov_A_DI_AL() {
   //  mov [di],al
