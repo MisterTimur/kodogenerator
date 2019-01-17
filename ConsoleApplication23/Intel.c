@@ -52,8 +52,8 @@ void movw(const char *reg, ushort value) {
 	case PL_I16:
 	case PL_I32:
 	{
-		int i = getRegIndex(reg, 0);
-		Program[PC++] = 0xB0 + i;
+		int i = getRegIndex(reg, 1);
+		Program[PC++] = 0xB8 + i;
 		Program[PC++] = ((uchar *)&value)[0];
 		Program[PC++] = ((uchar *)&value)[1];
 
