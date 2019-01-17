@@ -99,6 +99,13 @@ void xor_EAX_EAX() {
   } else
     ERR("xor_EAX_EAX");
 }
+void xor_AX_AX() {
+  if (Platform == PL_I16) { // Платформа 16 бит 8086
+    Program[PC++] = 0x33;
+    Program[PC++] = 0xC0;
+  } else
+    ERR("xor_AX_AX");
+}
 
 void inc_DI_() {
   if (Platform == PL_I16) { // Платформа 16 бит 8086
@@ -125,13 +132,6 @@ void test_AX_AX_() {
     Program[PC++] = 0xC0;
   } else
     ERR("test_AX_AX");
-}
-void xor_AX_AX() {
-  if (Platform == PL_I16) { // Платформа 16 бит 8086
-    Program[PC++] = 0x33;
-    Program[PC++] = 0xC0;
-  } else
-    ERR("xor_AX_AX");
 }
 
 void mov_CS_AX() {
@@ -256,35 +256,6 @@ void mov_SI_A_(ushort value) {
 	else
 		ERR("mov_SI_A");
 }
-
-void int_(uchar value) {
-  if (Platform == PL_I16) { // Платформа 16 бит 8086
-    Program[PC++] = 0xCD;
-    Program[PC++] = value;
-  } else if (Platform == PL_I32) { // Платформа 32бит 80386
-    Program[PC++] = 0xCD;
-    Program[PC++] = value;
-  } else if (Platform == PL_I64) { // Платформа 64 бит
-    Program[PC++] = 0xCD;
-    Program[PC++] = value;
-  } else
-    ERR("Ошибка такой команды в выбраной платформе не сущестукет ");
-}
-
-
-void mul_DL_() {
-  if (Platform == PL_I16) { // Платформа 16 бит 8086
-    Program[PC++] = 0xF6;
-    Program[PC++] = 0xE2;
-  } else
-    ERR("mul_AL_");
-}
-void inc_DX_() {
-  if (Platform == PL_I16) { // Платформа 16 бит 8086
-    Program[PC++] = 0x42;
-  } else
-    ERR("inc_DX_");
-}
 void mov_SI_AX_() {
   if (Platform == PL_I16) { // Платформа 16 бит 8086
     Program[PC++] = 0x8B;
@@ -292,22 +263,6 @@ void mov_SI_AX_() {
   } else
     ERR("mov_SI_AX_");
 }
-void add_AX_DX_() {
-  if (Platform == PL_I16) { // Платформа 16 бит 8086
-    Program[PC++] = 0x03;
-    Program[PC++] = 0xC2;
-  } else
-    ERR("add_AX_DX_");
-}
-void shl_DL_1_() {
-  if (Platform == PL_I16) { // Платформа 16 бит 8086
-    Program[PC++] = 0xD0;
-    Program[PC++] = 0xE2;
-  } else
-    ERR("shl_DL_1_");
-}
-
-
 void mov_A_DI_AL() {
   //  mov [di],al
   if (Platform == PL_I16) { // Платформа 16 бит 8086
@@ -356,20 +311,6 @@ void mov_AL_A_SI() {
   } else
     ERR("mov_AL_A_SI");
 }
-
-void mov_A_DI_AX() {
-  if (Platform == PL_I16) { // Платформа 16 бит 8086
-    Program[PC++] = 0x89;
-    Program[PC++] = 0x05;
-  } else if (Platform == PL_I32) { // Платформа 32 бит 80386
-    Program[PC++] = 0x67;
-    Program[PC++] = 0x66;
-    Program[PC++] = 0x89;
-    Program[PC++] = 0x05;
-  } else
-    ERR("mov_A_DI_AX");
-}
-
 void mov_A_ES_DI_AL() {
   if (Platform == PL_I16) { // Платформа 16 бит 8086
     Program[PC++] = 0x26;
@@ -396,6 +337,65 @@ void mov_A_ES_SI_AL() {
   } else
     ERR("mov_A_ES_SI_AL");
 }
+void mov_A_DI_AX() {
+  if (Platform == PL_I16) { // Платформа 16 бит 8086
+    Program[PC++] = 0x89;
+    Program[PC++] = 0x05;
+  } else if (Platform == PL_I32) { // Платформа 32 бит 80386
+    Program[PC++] = 0x67;
+    Program[PC++] = 0x66;
+    Program[PC++] = 0x89;
+    Program[PC++] = 0x05;
+  } else
+    ERR("mov_A_DI_AX");
+}
+
+void int_(uchar value) {
+  if (Platform == PL_I16) { // Платформа 16 бит 8086
+    Program[PC++] = 0xCD;
+    Program[PC++] = value;
+  } else if (Platform == PL_I32) { // Платформа 32бит 80386
+    Program[PC++] = 0xCD;
+    Program[PC++] = value;
+  } else if (Platform == PL_I64) { // Платформа 64 бит
+    Program[PC++] = 0xCD;
+    Program[PC++] = value;
+  } else
+    ERR("Ошибка такой команды в выбраной платформе не сущестукет ");
+}
+
+
+void mul_DL_() {
+  if (Platform == PL_I16) { // Платформа 16 бит 8086
+    Program[PC++] = 0xF6;
+    Program[PC++] = 0xE2;
+  } else
+    ERR("mul_AL_");
+}
+void inc_DX_() {
+  if (Platform == PL_I16) { // Платформа 16 бит 8086
+    Program[PC++] = 0x42;
+  } else
+    ERR("inc_DX_");
+}
+void add_AX_DX_() {
+  if (Platform == PL_I16) { // Платформа 16 бит 8086
+    Program[PC++] = 0x03;
+    Program[PC++] = 0xC2;
+  } else
+    ERR("add_AX_DX_");
+}
+void shl_DL_1_() {
+  if (Platform == PL_I16) { // Платформа 16 бит 8086
+    Program[PC++] = 0xD0;
+    Program[PC++] = 0xE2;
+  } else
+    ERR("shl_DL_1_");
+}
+
+
+
+
 
 void jmp_byte(const char *str) {
 
