@@ -373,7 +373,7 @@ void mov_DX_(ushort value) {
 		Program[PC++] = ((uchar *)&value)[0];
 		Program[PC++] = ((uchar *)&value)[1];
 	} else
-		ERR("mov_AX_");
+		ERR("mov_DX_");
 }
 void mov_AX_(ushort value) {
 	if (Platform == PL_I16) { // Платформа 16 бит 8086
