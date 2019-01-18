@@ -49,6 +49,8 @@ void mov_EAX_CR0();
 
 void mov_CR0_EAX();
 
+void jmp_32b(ushort value1, ushort value2);
+
 void mov_ESP_(uint value);
 
 void mov_EDI_(uint value);

@@ -58,8 +58,7 @@ void IncludeMyPrint() {
   mov_A_ES_SI_AL(); // mov [ES:DI],AL Выводим атрибуты сивмол на экран
   inc_SI_();        // inc Si
   inc_DI_();        // inc di
-  jmp_byte("Cikl"); // jmp cikl
-
+  jmp_byte("Cikl"); // jmp cikl       
   LAB_("EX");
 
   mov_DX_A_(ADR_("CURR_Y")); // Переход на след строку
@@ -72,9 +71,7 @@ void IncludeMyPrint() {
   VAR_WORD_("CURR_X", 0);
   VAR_WORD_("CURR_Y", 0);
 }
-
      
-
 // Таблица GDT     
 void  gdt_00(){
 ;// НУЛЕВОЙ ДИСКРИПТОР  -; // Его использовать в процессоре нельзя
@@ -149,15 +146,17 @@ db_(0x00)       ;// 4-й байт адреса
 }
 void  gdt(){
 
-LAB_("GDT_START");
+FUN_("GDT_START");
 gdt_00();// НУЛЕВОЙ ДИСКРИПТОР
 gdt_01();// Дексриптор кода 
 gdt_02();// Дексриптор Данных  
 
-int  Siz_Gdt=ADR_("GDT_END")-ADR_("GDT_START");
+int  Siz_Gdt=ADR_("GDT")-ADR_("GDT_START");
+
+FUN_("GDT");
 dw_(Siz_Gdt);// Рземер таблицы
 dd_(ADR_("GDT_START"));// Адрес таблицы
-LAB_("GDT_END");
+FUN_("GDT_END");
 
 //DB      $09,$08         ; // Размер таблицы
 //DB      $09,$0A,$0B,$0C ; // Адрес таблицы
@@ -292,7 +291,7 @@ void Loader() {
 
   MyPrint("End load 18 sectors");
   MyPrint("Init 32 bit mode");
-  Tr_Stop();
+  //Tr_Stop();
   //-----------;
   cli()        ; // Запрещаем прерывания 
   in_AL_(0x70) ; // Запрещаем NMI 
@@ -303,20 +302,27 @@ void Loader() {
   or_AL_(2)    ; // Адресная линия A20   
   out_AL_(0x92);   
   //-----------;
-  lgdt_(0x0907);// Загрузка таблицы дискрипторов памяти  
-  lidt_(0x0907);// Загрузка таблицы дискрипторов прерываний
+  lgdt_(ADR_("GDT"));// Загрузка таблицы дискрипторов памяти  
+  lidt_(ADR_("GDT"));// Загрузка таблицы дискрипторов прерываний
   //-----------;   
   mov_EAX_CR0();
   or_AL_(1)    ;
   mov_CR0_EAX();
   //-----------;
-   MyPrint("jmp to 32 bit mode");
+  jmp_32b(8,ADR_("32 Bit Start"));
+  NOP_();
+  FUN_("32 Bit Start");
+  NOP_();
+  Tr_Stop()    ;
+  //MyPrint("jmp to 32 bit mode");
+  
 
    //
-  Tr_Stop()    ;
+  
 
   IncludeMyPrint();
 
+  gdt();// Размещаме таблицу GDT
 
  
       

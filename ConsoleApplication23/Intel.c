@@ -448,7 +448,22 @@ void mov_CR0_EAX(){
 		ERR("mov_EAX_CR0"); 
 
 } 
-     
+void jmp_32b(ushort value1,ushort value2){
+// Команда прыжка в 32 битный режим 
+// Дальний переход value1 номер страницы кода 
+// Дальний переход value2 адрес внутри страницы  
+	if (Platform == PL_I16) { // Платформа 16 бит 8086
+		Program[PC++] = 0xEA;
+		Program[PC++] = ((uchar *)&value2)[0];
+		Program[PC++] = ((uchar *)&value2)[1];
+		Program[PC++] = ((uchar *)&value1)[0];
+		Program[PC++] = ((uchar *)&value1)[1];
+	}
+	else
+		ERR("jmp_32b");   
+}  
+  
+
 void mul_DL_() {
   if (Platform == PL_I16) { // Платформа 16 бит 8086
     Program[PC++] = 0xF6;
