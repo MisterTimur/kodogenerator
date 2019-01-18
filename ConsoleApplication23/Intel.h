@@ -13,11 +13,15 @@ void NOP_();
 
 void cli();
 
+void add_EAX_EDX_();
+
 void xor_EAX_EAX();
 
 void inc_DI_();
 
 void inc_SI_();
+
+void inc_ESI_();
 
 void test_AL_AL_();
 
@@ -31,9 +35,19 @@ void mov_DS_AX();
 
 void mov_SS_AX();
 
+void mov_SP_AX();
+
 void mov_ES_AX();
 
+void mov_FS_AX();
+
+void mov_GS_AX();
+
 void int_(uchar value);
+
+void mov_DL_(uchar value);
+
+void mov_AL_(uchar value);
 
 void in_AL_(uchar value);
 
@@ -51,6 +65,10 @@ void mov_CR0_EAX();
 
 void jmp_32b(ushort value1, ushort value2);
 
+void mov_EDX_(uint value);
+
+void mov_EAX_(uint value);
+
 void mov_ESP_(uint value);
 
 void mov_EDI_(uint value);
@@ -61,6 +79,8 @@ void inc_DX_();
 
 void mov_SI_AX_();
 
+void mov_ESI_EAX_();
+
 void add_AX_DX_();
 
 void shl_DL_1_();
@@ -69,15 +89,29 @@ void mov_A_DX_(ushort value);
 
 void mov_DX_A_(ushort value);
 
+void mov_DX_A_DD(uint value);
+
+void mov_A_DD_DX_(uint value);
+                          
+void mov_DX_(ushort value);
+
+void mov_AX_(ushort value);
+
 void mov_AX_A_(ushort value);
 
+void mov_AX_A_DD(uint value);
+
 void mov_SI_A_(ushort value);
+
+void mov_A_ESI_AL_();
 
 void mov_A_DI_AL();
 
 void mov_A_SI_AL();
 
 void mov_AL_A_DI();
+
+void mov_AL_A_EDI();
 
 void mov_AL_A_SI();
 

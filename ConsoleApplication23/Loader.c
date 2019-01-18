@@ -12,6 +12,17 @@ void VAR_BYTE_(const char *name, uchar number) {
   DB_(number);
 }
 
+void VAR_WORD_GLOBAL(const char *name, ushort number) {
+  FUN_(name);
+  DB_(((uchar *)&number)[0]);
+  DB_(((uchar *)&number)[1]);
+}
+void VAR_BYTE_GLOBAL(const char *name, uchar number) {
+  FUN_(name);
+  DB_(number);
+}
+
+
 void Tr_Stop() {
   LAB_("ZZZ");
   NOP_();
@@ -30,32 +41,54 @@ void MyPrint(const char *text) {
   NOP_();
   FUN_("MyPrint");
 }
+void MyPrint32(const char *text) {
+
+  FUN_("MyPrint32");
+   
+  NOP_();
+   
+  mov_EDI_(ADR_("lText"));
+  //movw("DI", ADR_("lText")); нужно будет выяснить почему тут зависало 
+    
+  call_("PRINT32");
+  jmp_byte("NEX");
+  LAB_("lText");
+  STR_(text);
+  LAB_("NEX");
+  NOP_();
+  FUN_("MyPrint32");
+
+}
+
 void IncludeMyPrint() {
 
   // =============================================
   // подпрограмам вывода строки в консоль в 16 битном режиме
   // В DS:DI должен быть адрес строки
-
+  SetPlatform(PL_I16); // Выбираем платформу
   FUN_("PRINT16"); // Обьявляем новую область
   movw("AX", 0xB800); // mov ax,B800  Видеопамять
   mov_ES_AX();     // mov es,ax    в ES
 
+  // Вычислем координату по Y
   mov_AX_A_(ADR_("CURR_Y"));
   movb("DL", 160);
   mul_DL_();
+
+  // Вычислем координату по X
   mov_DX_A_(ADR_("CURR_X"));
   shl_DL_1_();
-  add_AX_DX_();
+  add_AX_DX_();   
   mov_SI_AX_();
 
-  LAB_("Cikl");
+  LAB_("Cikl");     
   mov_AL_A_DI();    // mov al,[di]
   test_AL_AL_();    // test al,al
   jz_byte("EX");    // jz EX
   mov_A_ES_SI_AL(); // mov [ES:DI],AL Выводим сивмол на экран
   inc_SI_();        // inc Si
   movb("AL", 0x0F);
-  mov_A_ES_SI_AL(); // mov [ES:DI],AL Выводим атрибуты сивмол на экран
+  mov_A_ES_SI_AL(); // mov [ES:SI],AL Выводим атрибуты сивмол на экран
   inc_SI_();        // inc Si
   inc_DI_();        // inc di
   jmp_byte("Cikl"); // jmp cikl       
@@ -66,10 +99,50 @@ void IncludeMyPrint() {
   mov_A_DX_(ADR_("CURR_Y"));
   movw("DX", 0);
   mov_A_DX_(ADR_("CURR_X"));
+  ret_();
+         
+  //-------------------------------------------------------------------
+  SetPlatform(PL_I32); // Выбираем платформу
+  FUN_("PRINT32"); // Обьявляем новую область
+  
+  mov_EAX_(0);// ОБнуляю EAX                                    
+  mov_EDX_(0);// ОБнуляю EDX                                      
+  // Вычислем координату по Y
+  mov_AX_A_DD(ADR_("CURR_Y"));// Читаю в AX координату по Y
+  mov_DL_(160);//
+  mul_DL_();//Умножаю координату по Y на длину строки в байтх 
+  // Вычислем координату по X
+  mov_DX_A_DD(ADR_("CURR_X"));// Загружаю коо по Х
+  shl_DL_1_();// Умножаю на 2 
+  add_AX_DX_(); // ПРиьавляю к координате  вычселеной по Y
+  mov_EDX_(0xB8000);// ЗАгржаю адрес видео памяти 
+  add_EAX_EDX_(); // ПРибавляю его к  
+  mov_ESI_EAX_();
+
+  LAB_("Cikl");
+  mov_AL_A_DI();    // mov al,[di]
+  test_AL_AL_();    // test al,al
+  jz_byte("EX");    // jz EX
+  mov_A_ESI_AL_(); // mov [ES:DI],AL Выводим сивмол на экран
+  inc_ESI_();        // inc Si
+  mov_AL_(0x0F);
+  mov_A_ESI_AL_();   // mov [ESI],AL Выводим атрибуты сивмол на экран
+  inc_ESI_();        // inc Si
+  inc_DI_();        // inc di
+  jmp_byte("Cikl"); // jmp cikl       
+  LAB_("EX");
+   NOP_();Tr_Stop()    ;
+  mov_DX_A_DD(ADR_("CURR_Y")); // Переход на след строку
+  inc_DX_();
+  mov_A_DD_DX_(ADR_("CURR_Y"));         
+  mov_DX_(0);       
+  mov_A_DD_DX_(ADR_("CURR_X"));
 
   ret_();
-  VAR_WORD_("CURR_X", 0);
-  VAR_WORD_("CURR_Y", 0);
+
+
+  VAR_WORD_GLOBAL("CURR_X", 0);
+  VAR_WORD_GLOBAL("CURR_Y", 0);
 }
      
 // Таблица GDT     
@@ -311,16 +384,30 @@ void Loader() {
   //-----------;
   jmp_32b(8,ADR_("32 Bit Start"));
   NOP_();
+  IncludeMyPrint();
   FUN_("32 Bit Start");
+  SetPlatform(PL_I32); // Выбираем платформу
   NOP_();
-  Tr_Stop()    ;
-  //MyPrint("jmp to 32 bit mode");
+  // Загрузка селекторов 
+  //;//---------------;
+  mov_AX_(0x10);//mov ax, 10h       ;
+  mov_DS_AX();//mov ds, ax
+  mov_SS_AX();//mov ss, ax
+  mov_ES_AX();//mov es, ax
+  mov_SP_AX();//mov esp,2FFFFh;          
+  mov_AX_(0x0);//mov ax, 0
+  mov_FS_AX();//mov fs, ax
+  mov_GS_AX();//mov gs, ax
+  //;//---------------;  
+                  
+  MyPrint32("32 bit mode Ok.");
+  Tr_Stop();
   
 
    //
   
 
-  IncludeMyPrint();
+  
 
   gdt();// Размещаме таблицу GDT
 

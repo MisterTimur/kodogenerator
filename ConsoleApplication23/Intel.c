@@ -87,6 +87,17 @@ void cli() {
     ERR(" ERR cli ");
 }
 
+void add_EAX_EDX_(){
+  if (Platform == PL_I32) { // Платформа 32бит 80386
+    Program[PC++] = 0x01;
+    Program[PC++] = 0xD0;
+  } else if (Platform == PL_I64) { // Платформа 64 бит
+    Program[PC++] = 0x01;
+    Program[PC++] = 0xD0;
+  } else
+    ERR("add_EAX_EDX_");
+}  
+
 void xor_EAX_EAX() {
   if (Platform == PL_I32) { // Платформа 32бит 80386
     Program[PC++] = 0x66;
@@ -111,16 +122,52 @@ void inc_DI_() {
   if (Platform == PL_I16) { // Платформа 16 бит 8086
     Program[PC++] = 0x47;
   } else
+  if (Platform == PL_I32) { // Платформа 32 бит 8086
+    Program[PC++] = 0x66;
+    Program[PC++] = 0x47;
+  } else
+  if (Platform == PL_I64) { // Платформа 64 бит 8086
+    Program[PC++] = 0x66;
+    Program[PC++] = 0xFF;
+    Program[PC++] = 0xC7;
+  } else
     ERR("inc_DI_");
 }
 void inc_SI_() {
   if (Platform == PL_I16) { // Платформа 16 бит 8086
     Program[PC++] = 0x46;
   } else
+  if (Platform == PL_I32) { // Платформа 32 бит 80386
+    Program[PC++] = 0x66;
+    Program[PC++] = 0x46;
+  } else
+  if (Platform == PL_I64) { // Платформа 64 бит 8086
+    Program[PC++] = 0x66;
+    Program[PC++] = 0xFF;
+    Program[PC++] = 0xC6;
+  } else
     ERR("inc_SI_");
+}
+void inc_ESI_() {       
+  if (Platform == PL_I32) { // Платформа 32 бит 80386
+    Program[PC++] = 0x46;   
+  } else
+  if (Platform == PL_I64) { // Платформа 64 бит 8086      
+    Program[PC++] = 0xFF;
+    Program[PC++] = 0xC6;
+  } else
+    ERR("inc_ESI_");
 }
 void test_AL_AL_() {
   if (Platform == PL_I16) { // Платформа 16 бит 8086
+    Program[PC++] = 0x84;
+    Program[PC++] = 0xC0;
+  } else
+  if (Platform == PL_I32) { // Платформа 32 бит 8086
+    Program[PC++] = 0x84;
+    Program[PC++] = 0xC0;
+  } else
+  if (Platform == PL_I64) { // Платформа 64 бит 8086
     Program[PC++] = 0x84;
     Program[PC++] = 0xC0;
   } else
@@ -133,8 +180,6 @@ void test_AX_AX_() {
   } else
     ERR("test_AX_AX");
 }
- 
-
   
 
 void mov_CS_AX() {
@@ -175,6 +220,21 @@ void mov_SS_AX() {
   } else
     ERR("Ошибка такой команды в выбраной платформе не сущестукет ");
 }
+void mov_SP_AX() {
+  if (Platform == PL_I16) { // Платформа 16 бит 8086
+    Program[PC++] = 0x8B;
+    Program[PC++] = 0xE0;
+  } else if (Platform == PL_I32) { // Платформа 32бит 80386
+    Program[PC++] = 0x66;            //6689C4   
+    Program[PC++] = 0x89;
+    Program[PC++] = 0xC4;   
+  } else if (Platform == PL_I64) { // Платформа 64 бит
+    Program[PC++] = 0x66;            //6689C4   
+    Program[PC++] = 0x89;
+    Program[PC++] = 0xC4;   
+  } else
+    ERR("mov_SP_AX");
+}
 void mov_ES_AX() {
   if (Platform == PL_I16) { // Платформа 16 бит 8086
     Program[PC++] = 0x8E;
@@ -188,6 +248,33 @@ void mov_ES_AX() {
   } else
     ERR("Ошибка такой команды в выбраной платформе не сущестукет ");
 }
+void mov_FS_AX() {
+  if (Platform == PL_I16) { // Платформа 16 бит 8086
+    Program[PC++] = 0x8E;
+    Program[PC++] = 0xE0;
+  } else if (Platform == PL_I32) { // Платформа 32бит 80386
+    Program[PC++] = 0x8E;
+    Program[PC++] = 0xE0;
+  } else if (Platform == PL_I64) { // Платформа 64 бит
+    Program[PC++] = 0x8E;
+    Program[PC++] = 0xE0;
+  } else
+    ERR("mov_FS_AX");
+}
+void mov_GS_AX() {
+  if (Platform == PL_I16) { // Платформа 16 бит 8086
+    Program[PC++] = 0x8E;
+    Program[PC++] = 0xE8;
+  } else if (Platform == PL_I32) { // Платформа 32бит 80386
+    Program[PC++] = 0x8E;
+    Program[PC++] = 0xE8;
+  } else if (Platform == PL_I64) { // Платформа 64 бит
+    Program[PC++] = 0x8E;
+    Program[PC++] = 0xE8;
+  } else
+    ERR("mov_GS_AX");
+}
+
 void mov_ESP_(uint value) {
   if (Platform == PL_I32) { // Платформа 32бит 80386
     Program[PC++] = 0xBC;
@@ -238,17 +325,98 @@ void mov_DX_A_(ushort value) {
 		Program[PC++] = ((uchar *)&value)[1];
 	}
 	else
-		ERR("mov_DX_A_");
+		ERR("mov_DX_A_");  //     
+}
+void mov_DX_A_DD(uint value) {
+	if (Platform == PL_I32) { // Платформа 16 бит 8086
+		Program[PC++] = 0x66;
+		Program[PC++] = 0x8B;
+		Program[PC++] = 0x15;
+		Program[PC++] = ((uchar *)&value)[0];
+		Program[PC++] = ((uchar *)&value)[1];
+		Program[PC++] = ((uchar *)&value)[2];
+		Program[PC++] = ((uchar *)&value)[3];
+	}
+	else
+		ERR("mov_DX_A_DD");     
+}
+void mov_A_DD_DX_(uint value) {
+	if (Platform == PL_I32) { // Платформа 16 бит 8086
+		Program[PC++] = 0x66;       //66 89 15 00000000   
+		Program[PC++] = 0x89;
+		Program[PC++] = 0x15;
+		Program[PC++] = ((uchar *)&value)[0];
+		Program[PC++] = ((uchar *)&value)[1];
+		Program[PC++] = ((uchar *)&value)[2];
+		Program[PC++] = ((uchar *)&value)[3];
+	}
+	else
+		ERR("mov_A_DD_DX_");     
+}
+
+
+void mov_DX_(ushort value) {
+	if (Platform == PL_I16) { // Платформа 16 бит 8086
+		Program[PC++] = 0xBA;
+		Program[PC++] = ((uchar *)&value)[0];
+		Program[PC++] = ((uchar *)&value)[1];
+	} else
+	if (Platform == PL_I32) { // Платформа 32 бит 8086
+		Program[PC++] = 0x66;
+		Program[PC++] = 0xBA;
+		Program[PC++] = ((uchar *)&value)[0];
+		Program[PC++] = ((uchar *)&value)[1];
+	} else
+	if (Platform == PL_I64) { // Платформа 64 бит 8086
+		Program[PC++] = 0x66;
+		Program[PC++] = 0xBA;
+		Program[PC++] = ((uchar *)&value)[0];
+		Program[PC++] = ((uchar *)&value)[1];
+	} else
+		ERR("mov_AX_");
+}
+void mov_AX_(ushort value) {
+	if (Platform == PL_I16) { // Платформа 16 бит 8086
+		Program[PC++] = 0xB8;
+		Program[PC++] = ((uchar *)&value)[0];
+		Program[PC++] = ((uchar *)&value)[1];
+	} else
+	if (Platform == PL_I32) { // Платформа 32 бит 8086
+		Program[PC++] = 0x66;
+		Program[PC++] = 0xB8;
+		Program[PC++] = ((uchar *)&value)[0];
+		Program[PC++] = ((uchar *)&value)[1];
+	} else
+	if (Platform == PL_I64) { // Платформа 64 бит 8086
+		Program[PC++] = 0x66;
+		Program[PC++] = 0xB8;
+		Program[PC++] = ((uchar *)&value)[0];
+		Program[PC++] = ((uchar *)&value)[1];
+	} else
+		ERR("mov_AX_");
 }
 void mov_AX_A_(ushort value) {
 	if (Platform == PL_I16) { // Платформа 16 бит 8086
 		Program[PC++] = 0xA1;
 		Program[PC++] = ((uchar *)&value)[0];
 		Program[PC++] = ((uchar *)&value)[1];
-	}
-	else
+	} else 
+
 		ERR("mov_AX_A_");
 }
+void mov_AX_A_DD(uint value) {     
+    if (Platform == PL_I32) { // Платформа 16 бит 8086
+		Program[PC++] = 0x66;
+		Program[PC++] = 0xA1;
+		Program[PC++] = ((uchar *)&value)[0];
+		Program[PC++] = ((uchar *)&value)[1];
+		Program[PC++] = ((uchar *)&value)[2];
+		Program[PC++] = ((uchar *)&value)[3];
+	}else 
+
+		ERR("mov_AX_A_DD");
+}
+
 void mov_SI_A_(ushort value) {
 	if (Platform == PL_I16) { // Платформа 16 бит 8086
 		Program[PC++] = 0x8B;
@@ -265,6 +433,29 @@ void mov_SI_AX_() {
     Program[PC++] = 0xF0;
   } else
     ERR("mov_SI_AX_");
+}
+void mov_ESI_EAX_() {
+  if (Platform == PL_I32) { // Платформа 32 бит 80386
+    Program[PC++] = 0x89;
+    Program[PC++] = 0xC6;
+  } else
+  if (Platform == PL_I64) { // Платформа 64 бит 80386
+    Program[PC++] = 0x89;
+    Program[PC++] = 0xC6;
+  } else
+    ERR("mov_ESI_EAX_");
+}
+void mov_A_ESI_AL_() {
+  if (Platform == PL_I32) { // Платформа 32 бит 80386
+    Program[PC++] = 0x88;
+    Program[PC++] = 0x06;
+  } else
+  if (Platform == PL_I64) { // Платформа 64 бит 80386
+    Program[PC++] = 0x67;
+    Program[PC++] = 0x88;
+    Program[PC++] = 0x06;
+  } else
+    ERR("mov_A_ESI_AL_");
 }
 void mov_A_DI_AL() {
   //  mov [di],al
@@ -302,6 +493,22 @@ void mov_AL_A_DI() {
   } else
     ERR("mov_AL_A_DI");
 }
+void mov_AL_A_EDI() {
+  //  mov al,[Edi]
+  if (Platform == PL_I32) { // Платформа 32бит 80386          
+    Program[PC++] = 0x8A;
+    Program[PC++] = 0x07;
+  } else
+  if (Platform == PL_I64) { // Платформа 32бит 80386
+    Program[PC++] = 0x67;
+    Program[PC++] = 0x8A;
+    Program[PC++] = 0x07;
+  } else
+    ERR("mov_AL_A_EDI");
+}
+
+
+
 void mov_AL_A_SI() {
   //  mov al,[di]
   if (Platform == PL_I16) { // Платформа 16 бит 8086
@@ -367,6 +574,34 @@ void int_(uchar value) {
     ERR("Ошибка такой команды в выбраной платформе не сущестукет ");
 }
 
+
+void mov_DL_(uchar value) {
+  if (Platform == PL_I16)       { // Платформа 16 бит 8086
+    Program[PC++] = 0xB2;
+    Program[PC++] = value;
+  } else if (Platform == PL_I32) { // Платформа 32бит 80386
+    Program[PC++] = 0xB2;
+    Program[PC++] = value;
+  } else if (Platform == PL_I64) { // Платформа 64 бит
+    Program[PC++] = 0xB2;
+    Program[PC++] = value;
+  } else
+    ERR("mov_DL_");
+}
+
+void mov_AL_(uchar value) {
+  if (Platform == PL_I16)       { // Платформа 16 бит 8086
+    Program[PC++] = 0xB0;
+    Program[PC++] = value;
+  } else if (Platform == PL_I32) { // Платформа 32бит 80386
+    Program[PC++] = 0xB0;
+    Program[PC++] = value;
+  } else if (Platform == PL_I64) { // Платформа 64 бит
+    Program[PC++] = 0xB0;
+    Program[PC++] = value;
+  } else
+    ERR("mov_AL_");
+}
 void in_AL_(uchar value) {
   if (Platform == PL_I16)       { // Платформа 16 бит 8086
     Program[PC++] = 0xE4;
@@ -462,6 +697,28 @@ void jmp_32b(ushort value1,ushort value2){
 	else
 		ERR("jmp_32b");   
 }  
+void mov_EDX_(uint value) {
+	if (Platform == PL_I32) { // Платформа 16 бит 8086
+		Program[PC++] = 0xBA;    
+		Program[PC++] = ((uchar *)&value)[0];
+		Program[PC++] = ((uchar *)&value)[1];
+		Program[PC++] = ((uchar *)&value)[2];
+		Program[PC++] = ((uchar *)&value)[3];
+	}
+	else
+		ERR("mov_EDX_");
+}
+void mov_EAX_(uint value) {
+	if (Platform == PL_I32) { // Платформа 16 бит 8086
+		Program[PC++] = 0xB8;    
+		Program[PC++] = ((uchar *)&value)[0];
+		Program[PC++] = ((uchar *)&value)[1];
+		Program[PC++] = ((uchar *)&value)[2];
+		Program[PC++] = ((uchar *)&value)[3];
+	}
+	else
+		ERR("mov_EAX_");
+}
   
 
 void mul_DL_() {
@@ -469,11 +726,25 @@ void mul_DL_() {
     Program[PC++] = 0xF6;
     Program[PC++] = 0xE2;
   } else
-    ERR("mul_AL_");
+  if (Platform == PL_I32) { // Платформа 16 бит 8086
+    Program[PC++] = 0xF6;
+    Program[PC++] = 0xE2;
+  } else
+    ERR("mul_DL_");
 }
 void inc_DX_() {
   if (Platform == PL_I16) { // Платформа 16 бит 8086
     Program[PC++] = 0x42;
+  } else
+  if (Platform == PL_I32) { // Платформа 32 бит 8086
+    Program[PC++] = 0x66;
+    Program[PC++] = 0x42;
+  } else
+  if (Platform == PL_I64) { // Платформа 64 бит 8086
+    Program[PC++] = 0x66;   // 66 FF C2   
+    Program[PC++] = 0xFF;
+    Program[PC++] = 0xC2;
+
   } else
     ERR("inc_DX_");
 }
@@ -482,10 +753,19 @@ void add_AX_DX_() {
     Program[PC++] = 0x03;
     Program[PC++] = 0xC2;
   } else
-    ERR("add_AX_DX_");
+  if (Platform == PL_I32) { // Платформа 16 бит 8086
+    Program[PC++] = 0x66;
+    Program[PC++] = 0x01;
+    Program[PC++] = 0xD0;
+  } else
+  ERR("add_AX_DX_");
 }
 void shl_DL_1_() {
   if (Platform == PL_I16) { // Платформа 16 бит 8086
+    Program[PC++] = 0xD0;
+    Program[PC++] = 0xE2;
+  } else
+  if (Platform == PL_I32) { // Платформа 32 бит 8086
     Program[PC++] = 0xD0;
     Program[PC++] = 0xE2;
   } else
@@ -567,3 +847,10 @@ void ret_() {
   } else
     ERR("ret_");
 }
+
+
+
+
+
+
+
