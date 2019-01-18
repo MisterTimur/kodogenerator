@@ -35,6 +35,20 @@ void mov_ES_AX();
 
 void int_(uchar value);
 
+void in_AL_(uchar value);
+
+void out_AL_(uchar value);
+
+void or_AL_(uchar value);
+
+void lgdt_(ushort value);
+
+void lidt_(ushort value);
+
+void mov_EAX_CR0();
+
+void mov_CR0_EAX();
+
 void mov_ESP_(uint value);
 
 void mov_EDI_(uint value);

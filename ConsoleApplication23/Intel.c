@@ -4,9 +4,10 @@
 const char *regname[3][9] = {
   { "AL", "CL", "DL", "BL", "AH", "CH", "DH", "BH" },
   { "AX", "CX", "DX", "BX", "SP", "BP", "SI", "DI" },
-  { "EAX","ECX","EDX","EBX","ESP","EBP","ESI","EDI" } 
+  { "EAX","ECX","EDX","EBX","ESP","EBP","ESI","EDI"} 
 };
-/*
+/* 
+  
 	Возвращает индекс регистра или -1 в случае ошибки
 */
 static int getRegIndex(const char *reg, int offset) {
@@ -62,7 +63,7 @@ void movw(const char *reg, ushort value) {
 		ERR("mov_AL_");
 	}
 }
-
+ 
 // Команды специфичные только для INTEL ===============
 
 void NOP_() {
@@ -132,6 +133,9 @@ void test_AX_AX_() {
   } else
     ERR("test_AX_AX");
 }
+ 
+
+  
 
 void mov_CS_AX() {
   if (Platform == PL_I16) { // Платформа 16 бит 8086
@@ -363,7 +367,88 @@ void int_(uchar value) {
     ERR("Ошибка такой команды в выбраной платформе не сущестукет ");
 }
 
+void in_AL_(uchar value) {
+  if (Platform == PL_I16)       { // Платформа 16 бит 8086
+    Program[PC++] = 0xE4;
+    Program[PC++] = value;
+  } else if (Platform == PL_I32) { // Платформа 32бит 80386
+    Program[PC++] = 0xE4;
+    Program[PC++] = value;
+  } else if (Platform == PL_I64) { // Платформа 64 бит
+    Program[PC++] = 0xE4;
+    Program[PC++] = value;
+  } else
+    ERR("in_AL_");
+}
+void out_AL_(uchar value) {
+  if (Platform == PL_I16)       { // Платформа 16 бит 8086
+    Program[PC++] = 0xE6;
+    Program[PC++] = value;
+  } else if (Platform == PL_I32) { // Платформа 32бит 80386
+    Program[PC++] = 0xE6;
+    Program[PC++] = value;
+  } else if (Platform == PL_I64) { // Платформа 64 бит
+    Program[PC++] = 0xE6;
+    Program[PC++] = value;
+  } else
+    ERR("out_AL_");
+}
+void or_AL_(uchar value) {
+  if (Platform == PL_I16)       { // Платформа 16 бит 8086
+    Program[PC++] = 0x0C;
+    Program[PC++] = value;
+  } else if (Platform == PL_I32) { // Платформа 32бит 80386
+    Program[PC++] = 0x0C;
+    Program[PC++] = value;
+  } else if (Platform == PL_I64) { // Платформа 64 бит
+    Program[PC++] = 0x0C;
+    Program[PC++] = value;
+  } else
+    ERR("or_AL_");
+}
+void lgdt_(ushort value) {
+	if (Platform == PL_I16) { // Платформа 16 бит 8086
+		Program[PC++] = 0x0F;
+		Program[PC++] = 0x01;
+		Program[PC++] = 0x16;
+		Program[PC++] = ((uchar *)&value)[0];
+		Program[PC++] = ((uchar *)&value)[1];
+	}
+	else
+		ERR("lgdt_");
+}
+void lidt_(ushort value) {
+	if (Platform == PL_I16) { // Платформа 16 бит 8086
+		Program[PC++] = 0x0F;
+		Program[PC++] = 0x01;
+		Program[PC++] = 0x1E;
+		Program[PC++] = ((uchar *)&value)[0];
+		Program[PC++] = ((uchar *)&value)[1];
+	}
+	else
+		ERR("lidt_");
+}
+void mov_EAX_CR0(){
+	if (Platform == PL_I16) { // Платформа 16 бит 8086
+		Program[PC++] = 0x0F;
+		Program[PC++] = 0x20;
+		Program[PC++] = 0xC0;                  
+	}
+	else
+		ERR("mov_EAX_CR0"); 
 
+} 
+void mov_CR0_EAX(){
+	if (Platform == PL_I16) { // Платформа 16 бит 8086
+		Program[PC++] = 0x0F;
+		Program[PC++] = 0x22;
+		Program[PC++] = 0xC0;                  
+	}
+	else
+		ERR("mov_EAX_CR0"); 
+
+} 
+     
 void mul_DL_() {
   if (Platform == PL_I16) { // Платформа 16 бит 8086
     Program[PC++] = 0xF6;
@@ -391,11 +476,7 @@ void shl_DL_1_() {
   } else
     ERR("shl_DL_1_");
 }
-
-
-
-
-
+ 
 void jmp_byte(const char *str) {
 
   uint value = ADR_(str);

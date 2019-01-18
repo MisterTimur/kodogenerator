@@ -30,3 +30,13 @@ void STR_(const char *str);
 void STL_(const char *str);
 
 void DB_(uchar value);
+
+void DW_(ushort value);
+             
+void DD_(uint value);
+
+void db_(uchar value);
+
+void dw_(ushort value);
+
+void dd_(uint value);
